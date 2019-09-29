@@ -15,11 +15,27 @@ exports.create = (req, res) => {
     idParking: req.body.isParking,
     location: {
       type: 'Point',
-      coordinates: [3, 10]
+      coordinates: [
+        req.body.location.coordinates.lat,
+        req.body.location.coordinates.lon
+      ]
     },
     isEnterParking: req.body.isEnterParking
   });
+  /*MODELO: OK
+{ 
+	"idUser": 1,
+    "text": "test2",
+    "idParking": 1,
+    "location": {
+  "type": "Point",
+    "coordinates": {"lat":36.098948, "lon":-10}
+  },
+    "isEnterParking": false
+}
 
+
+*/
   // Save Menu in the database
   pakingMenu
     .save()
