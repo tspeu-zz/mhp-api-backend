@@ -5,7 +5,7 @@ const config = {
   db: {
     host: 'localhost',
     port: 27017,
-    name: 'app-parking'
+    name: 'Parking'
   }
 };
 

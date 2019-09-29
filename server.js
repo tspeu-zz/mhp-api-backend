@@ -10,6 +10,9 @@ const connectionString = `mongodb://${host}:${port}/${name}`;
 
 // Get the API routes
 const router = express.Router();
+// Get the API route ...
+require('./routes/parking.routes.js');
+const api = require('./routes/api.routes');
 
 const app = express();
 
@@ -28,13 +31,14 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use('/api', api);
+
 router.get('/', function(req, res) {
   res.json({ error: false, message: 'Hello World' });
 });
 
 app.use('/api', router);
-
-require('./routes/parking.routes.js');
+console.log('APP running JO!');
 //Add route file here
 
 // Connecting to the database
@@ -43,7 +47,7 @@ mongoose
     useNewUrlParser: true
   })
   .then(() => {
-    console.log('Successfully connected  to the mongodb!');
+    console.log('Successfully connected  to the mongodb! JO');
   })
   .catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);

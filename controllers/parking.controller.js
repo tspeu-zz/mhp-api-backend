@@ -14,10 +14,10 @@ exports.create = (req, res) => {
     text: req.body.text,
     idParking: req.body.isParking,
     location: {
-      type: { type: String },
-      coordinates: [36.098948, -112.110492]
+      type: 'Point',
+      coordinates: [req.body.location.coordinates]
     },
-    isEnterParking: Boolean
+    isEnterParking: req.body.isEnterParking
   });
 
   // Save Menu in the database
@@ -36,8 +36,10 @@ exports.create = (req, res) => {
 
 // Retrieve all menu from the database.
 exports.findAll = (req, res) => {
+  console.log('findAll');
   Parking.find()
     .then(p => {
+      console.log('----------> ' + p);
       res.send(p);
     })
     .catch(err => {
@@ -49,23 +51,24 @@ exports.findAll = (req, res) => {
 
 // Find a single menu with a menu
 exports.findOne = (req, res) => {
-  Parking.findById(req.params.userId)
+  Parking.findById(req.params.idUser)
     .then(p => {
+      console.log('---> ' + p);
       if (!p) {
         return res.status(404).send({
-          message: 'menu not found with id ' + req.params.userId
+          message: 'user not found with id p' + req.params.idUser
         });
       }
-      res.send(menu);
+      res.send(p);
     })
     .catch(err => {
       if (err.kind === 'ObjectId') {
         return res.status(404).send({
-          message: 'menu not found with id ' + req.params.userId
+          message: 'user not found with id ' + req.params.idUser + err
         });
       }
       return res.status(500).send({
-        message: 'Something wrong retrieving user with id ' + req.params.userId
+        message: 'Something wrong retrieving user with id ' + req.params.idUser
       });
     });
 };
@@ -88,7 +91,6 @@ exports.update = (req, res) => {
       idParking: req.body.isParking,
       location: {
         type: { type: 'Point' },
-        type: { type: String },
         coordinates: [req.bodylat, req.body.lng]
         //lat: -34.397, lng: 150.644
       },
@@ -99,7 +101,7 @@ exports.update = (req, res) => {
     .then(p => {
       if (!p) {
         return res.status(404).send({
-          message: 'Data User not found with id ' + req.params.userId
+          message: 'Data User not found with id ' + req.params.idUser
         });
       }
       res.send(p);
@@ -107,24 +109,24 @@ exports.update = (req, res) => {
     .catch(err => {
       if (err.kind === 'ObjectId') {
         return res.status(404).send({
-          message: 'ParkingData item not found with id ' + req.params.userId
+          message: 'ParkingData item not found with id ' + req.params.idUser
         });
       }
       return res.status(500).send({
         message:
           'Something wrong updating parkingData item with id ' +
-          req.params.userId
+          req.params.idUser
       });
     });
 };
 
 // Delete a menu with the specified userId in the request
 exports.delete = (req, res) => {
-  Parking.findByIdAndRemove(req.params.userId)
+  Parking.findByIdAndRemove(req.params.idUser)
     .then(p => {
       if (!p) {
         return res.status(404).send({
-          message: 'Menu item not found with id ' + req.params.userId
+          message: 'Menu item not found with id ' + req.params.idUser
         });
       }
       res.send({ message: ' item deleted successfully!' });
@@ -132,11 +134,11 @@ exports.delete = (req, res) => {
     .catch(err => {
       if (err.kind === 'ObjectId' || err.name === 'NotFound') {
         return res.status(404).send({
-          message: ' item not found with id ' + req.params.userId
+          message: ' item not found with id ' + req.params.idUser
         });
       }
       return res.status(500).send({
-        message: 'Could not delete  item with id ' + req.params.userId
+        message: 'Could not delete  item with id ' + req.params.idUser
       });
     });
 };
