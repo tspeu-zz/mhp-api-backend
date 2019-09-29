@@ -15,7 +15,7 @@ exports.create = (req, res) => {
     idParking: req.body.isParking,
     location: {
       type: 'Point',
-      coordinates: [req.body.location.coordinates]
+      coordinates: [3, 10]
     },
     isEnterParking: req.body.isEnterParking
   });

@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
+const GeoJSON = require('mongoose-geojson-schema');
 
 const ParkingSchema = mongoose.Schema(
   {
     idUser: Number,
     text: String,
     idParking: Number,
-    location: GeoJSON.Point,
+    location: {
+      type: { type: String },
+      coordinates: [Number]
+    },
 
     isEnterParking: Boolean
   },
@@ -13,10 +17,6 @@ const ParkingSchema = mongoose.Schema(
     timestamps: true
   }
 );
-GeoJSON.Point = new mongoose.Schema({
-  type: { type: String, default: 'Point' },
-  coordinates: [{ type: 'Number' }]
-});
 /*The coordinates will be stored as an array in the format 
 [longitude, latitude]. We index on location and let mongoDB know we are using a “2dsphere”. */
 ParkingSchema.index({ location: '2dsphere' });
