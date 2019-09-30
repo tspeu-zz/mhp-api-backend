@@ -67,7 +67,7 @@ exports.findAll = (req, res) => {
 
 // Find a single menu with a menu
 exports.findOne = (req, res) => {
-  Parking.findById(req.params.idUser)
+  Parking.find({ idUser: req.params.idUser })
     .then(p => {
       console.log('---> ' + p);
       if (!p) {
@@ -79,8 +79,9 @@ exports.findOne = (req, res) => {
     })
     .catch(err => {
       if (err.kind === 'ObjectId') {
+        console.log('Error es  ->' + err);
         return res.status(404).send({
-          message: 'user not found with id ' + req.params.idUser + err
+          message: 'user not found with id  esto ' + req.params.idUser + err
         });
       }
       return res.status(500).send({
