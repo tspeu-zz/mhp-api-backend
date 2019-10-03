@@ -3,12 +3,38 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const config = require('./config');
 const cors = require('cors');
+const logger = require('morgan');
+const http = require('http');
+const https = require('https');
+
+const router = express.Router();
+// Get the API route ...
+require('./routes/parking.routes.js');
+const api = require('./routes/api.routes');
+
+const app = express();
 
 const serverPort = config.app.port;
+
 const {
   db: { host, port, name }
 } = config;
+
 const connectionString = `mongodb://${host}:${port}/${name}`;
+
+// Connecting to the database
+mongoose
+  .connect(connectionString, {
+    useNewUrlParser: true
+  })
+  .then(() => {
+    console.log('Successfully connected  to the mongodb! JO');
+  })
+  .catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+  });
+
 const allowedOrigins = [
   'capacitor://localhost',
   'ionic://localhost',
@@ -16,6 +42,7 @@ const allowedOrigins = [
   'http://localhost:8080',
   'http://localhost:8100'
 ];
+
 // Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
 const corsOptions = {
   origin: (origin, callback) => {
@@ -27,13 +54,7 @@ const corsOptions = {
   }
 };
 // Get the API routes
-const router = express.Router();
-// Get the API route ...
-require('./routes/parking.routes.js');
-const api = require('./routes/api.routes');
-
-const app = express();
-
+app.options('*', cors(corsOptions));
 // parse requests
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -49,28 +70,17 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(logger('dev')); // Log requests to API using morgan
+app.use(cors());
+
 app.use('/api', api);
+app.use('/api', router);
 
 router.get('/', function(req, res) {
   res.json({ error: false, message: 'Hello World' });
 });
 
-app.use('/api', router);
-console.log('APP running JO!');
 //Add route file here
-
-// Connecting to the database
-mongoose
-  .connect(connectionString, {
-    useNewUrlParser: true
-  })
-  .then(() => {
-    console.log('Successfully connected  to the mongodb! JO');
-  })
-  .catch(err => {
-    console.log('Could not connect to the database. Exiting now...', err);
-    process.exit();
-  });
 
 // default route
 app.get('/', (req, res) => {
@@ -80,3 +90,4 @@ app.get('/', (req, res) => {
 app.listen(config.app.port, () => {
   console.log('Server is up and running on port : ' + serverPort);
 });
+console.log('APP running!');

@@ -9,6 +9,10 @@ const connectionString = `mongodb://${host}:${port}/${name}`;
 
 mongoose.Promise = global.Promise;
 
+mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+
 // Connecting to the database
 mongoose
   .connect(connectionString, {
