@@ -12,7 +12,7 @@ exports.create = (req, res) => {
   const pakingMenu = new Parking({
     idUser: req.body.idUser,
     text: req.body.text,
-    idParking: req.body.isParking,
+    idParking: req.body.idParking,
     location: {
       type: 'Point',
       coordinates: [
@@ -22,21 +22,6 @@ exports.create = (req, res) => {
     },
     isEnterParking: req.body.isEnterParking
   });
-  /*MODELO: OK
-{ 
-	"idUser": 1,
-    "text": "test2",
-    "idParking": 1,
-    "location": {
-  "type": "Point",
-    "coordinates": {"lat":36.098948, "lon":-10}
-  },
-    "isEnterParking": false
-}
-
-
-*/
-  // Save Menu in the database
   pakingMenu
     .save()
     .then(data => {
