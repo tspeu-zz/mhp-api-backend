@@ -1,6 +1,6 @@
 const Parking = require('../models/parking.model.js');
 
-// create new Menu
+// create new parking
 exports.create = (req, res) => {
   // Request validation
   if (!req.body) {
@@ -9,7 +9,7 @@ exports.create = (req, res) => {
     });
   }
 
-  const pakingMenu = new Parking({
+  const paking = new Parking({
     idUser: req.body.idUser,
     text: req.body.text,
     idParking: req.body.idParking,
@@ -22,7 +22,7 @@ exports.create = (req, res) => {
     },
     isEnterParking: req.body.isEnterParking
   });
-  pakingMenu
+  paking
     .save()
     .then(data => {
       res.send(data);
@@ -35,7 +35,7 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all menu from the database.
+// Retrieve all parking from the database.
 exports.findAll = (req, res) => {
   console.log('findAll');
   Parking.find()
@@ -50,7 +50,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single menu with a menu
+// Find a single parking with a parkin
 exports.findOne = (req, res) => {
   Parking.find({ idUser: req.params.idUser })
     .then(p => {
@@ -75,7 +75,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a menu
+// Update a parking
 exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
@@ -122,13 +122,13 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a menu with the specified userId in the request
+// Delete a parking with the specified userId in the request
 exports.delete = (req, res) => {
   Parking.findByIdAndRemove(req.params.idUser)
     .then(p => {
       if (!p) {
         return res.status(404).send({
-          message: 'Menu item not found with id ' + req.params.idUser
+          message: 'parkin item not found with id ' + req.params.idUser
         });
       }
       res.send({ message: ' item deleted successfully!' });
